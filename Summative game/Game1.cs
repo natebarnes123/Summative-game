@@ -15,7 +15,7 @@ namespace Summative_game
         Rectangle targetRect;
         Rectangle crosshairRect;
         Rectangle window;
-
+        MouseState mouseState;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -26,11 +26,11 @@ namespace Summative_game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
-            crosshairRect = new Rectangle(200, 200, 150, 150);
+            crosshairRect = new Rectangle(310, 238, 150, 150);
             targetRect = new Rectangle(350, 350, 150, 150);
             base.Initialize();
         }
@@ -45,6 +45,8 @@ namespace Summative_game
 
         protected override void Update(GameTime gameTime)
         {
+            mouseState = Mouse.GetState();
+            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
