@@ -24,6 +24,7 @@ namespace Summative_game
         Texture2D target;
         Texture2D crosshair;
         Rectangle targetRect;
+
         Rectangle crosshairRect;
         Rectangle window;
         MouseState mouseState;
@@ -35,7 +36,7 @@ namespace Summative_game
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -83,7 +84,7 @@ namespace Summative_game
             if (screen == Screen.Intro)
             {
                 _spriteBatch.Draw(Intro, window, Color.White);
-                _spriteBatch.DrawString(font, "Left click to play", new Vector2(550, 300), Color.White);
+                _spriteBatch.DrawString(font, "Left click to play", new Vector2(200, 350), Color.White);
             }
             
             _spriteBatch.End();
