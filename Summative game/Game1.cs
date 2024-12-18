@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Summative_game
@@ -20,16 +21,18 @@ namespace Summative_game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         Texture2D Intro;
         Texture2D target;
         Texture2D crosshair;
         Rectangle targetRect;
-
+        Texture2D controlScreen;
         Rectangle crosshairRect;
         Rectangle window;
         MouseState mouseState;
         Screen screen;
         SpriteFont font;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -57,6 +60,7 @@ namespace Summative_game
             crosshair = Content.Load<Texture2D>("crosshair");
             Intro = Content.Load<Texture2D>("Intro");
             font = Content.Load<SpriteFont>("font");
+            controlScreen = Content.Load<Texture2D>("Controls");
             // TODO: use this.Content to load your game content here
         }
 
@@ -66,7 +70,10 @@ namespace Summative_game
             this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                screen = Screen.Play;
+            if (mouseState.RightButton == ButtonState.Pressed)
+                screen = Screen.Controls;
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -85,8 +92,10 @@ namespace Summative_game
             {
                 _spriteBatch.Draw(Intro, window, Color.White);
                 _spriteBatch.DrawString(font, "Left click to play", new Vector2(200, 350), Color.White);
+                _spriteBatch.DrawString(font, "Right click to see controls", new Vector2(200, 350), Color.White);
             }
-            
+            if (screen == Screen.Controls)
+                _spriteBatch.Draw(controlScreen, window, Color.White);
             _spriteBatch.End();
             // TODO: Add your drawing code here
 
