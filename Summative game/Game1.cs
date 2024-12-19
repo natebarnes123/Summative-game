@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace Summative_game
 {
@@ -21,7 +20,7 @@ namespace Summative_game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        KeyboardState keyboardState;
         Texture2D Intro;
         Texture2D target;
         Texture2D crosshair;
@@ -66,14 +65,20 @@ namespace Summative_game
 
         protected override void Update(GameTime gameTime)
         {
+            keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Left))
+                screen = Screen.Play;
+            if (keyboardState.IsKeyDown(Keys.Right))
+               screen = Screen.Controls;
+            if (keyboardState.IsKeyDown(Keys.Up))
+                screen = Screen.Intro;
             mouseState = Mouse.GetState();
             this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (mouseState.LeftButton == ButtonState.Pressed)
-                screen = Screen.Play;
-            if (mouseState.RightButton == ButtonState.Pressed)
-                screen = Screen.Controls;
+            
+            
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -91,11 +96,17 @@ namespace Summative_game
             if (screen == Screen.Intro)
             {
                 _spriteBatch.Draw(Intro, window, Color.White);
-                _spriteBatch.DrawString(font, "Left click to play", new Vector2(200, 350), Color.White);
-                _spriteBatch.DrawString(font, "Right click to see controls", new Vector2(200, 350), Color.White);
+                _spriteBatch.DrawString(font, "Left arrow to play", new Vector2(200, 350), Color.White);
+                _spriteBatch.DrawString(font, "Right arrow for controls", new Vector2(200, 100), Color.White);
             }
             if (screen == Screen.Controls)
+            {
                 _spriteBatch.Draw(controlScreen, window, Color.White);
+                _spriteBatch.DrawString(font, "Use your mouse to aim.", new Vector2(125, 150), Color.White);
+                _spriteBatch.DrawString(font, "Press upkey to return to menu.", new Vector2(125, 225), Color.White);
+
+            }
+                
             _spriteBatch.End();
             // TODO: Add your drawing code here
 
