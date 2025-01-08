@@ -30,8 +30,10 @@ namespace Summative_game
         Rectangle window;
         MouseState mouseState;
         Screen screen;
+        Texture2D playBackround;
+        
         SpriteFont font;
-
+        int point;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -46,7 +48,7 @@ namespace Summative_game
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
-            crosshairRect = new Rectangle(330, 210, 150, 150);
+
             targetRect = new Rectangle(350, 350, 150, 150);
             base.Initialize();
             screen = Screen.Intro;
@@ -60,6 +62,7 @@ namespace Summative_game
             Intro = Content.Load<Texture2D>("Intro");
             font = Content.Load<SpriteFont>("font");
             controlScreen = Content.Load<Texture2D>("Controls");
+            playBackround = Content.Load<Texture2D>("playBackround");
             // TODO: use this.Content to load your game content here
         }
 
@@ -90,8 +93,14 @@ namespace Summative_game
             _spriteBatch.Begin();
             if (screen == Screen.Play)
             {
+                _spriteBatch.Draw(playBackround,window, Color.White);
                 _spriteBatch.Draw(target, targetRect, Color.White);
-                _spriteBatch.Draw(crosshair, crosshairRect, Color.White);
+                _spriteBatch.DrawString(font, "Press enter to play", new Vector2(150, 100), Color.Black);
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                {
+                 _spriteBatch.Draw(target, targetRect, Color.White);
+                }
+
             }
             if (screen == Screen.Intro)
             {
