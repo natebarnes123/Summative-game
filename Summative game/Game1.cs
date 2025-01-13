@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Threading;
 
 
 namespace Summative_game
@@ -31,9 +33,10 @@ namespace Summative_game
         MouseState mouseState;
         Screen screen;
         Texture2D playBackround;
-        
+        bool playing;
+        float seconds;
         SpriteFont font;
-        int point;
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -48,10 +51,11 @@ namespace Summative_game
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
-
+            seconds = 0f;
             targetRect = new Rectangle(350, 350, 150, 150);
             base.Initialize();
             screen = Screen.Intro;
+            playing = false;
         }
 
         protected override void LoadContent()
@@ -64,23 +68,65 @@ namespace Summative_game
             controlScreen = Content.Load<Texture2D>("Controls");
             playBackround = Content.Load<Texture2D>("playBackround");
             // TODO: use this.Content to load your game content here
+
+            
+            
         }
 
         protected override void Update(GameTime gameTime)
         {
             keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Left))
-                screen = Screen.Play;
-            if (keyboardState.IsKeyDown(Keys.Right))
-               screen = Screen.Controls;
-            if (keyboardState.IsKeyDown(Keys.Up))
-                screen = Screen.Intro;
             mouseState = Mouse.GetState();
+
+            
+
+
             this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
-            
+
+            if (screen == Screen.Intro)
+            {
+                if (keyboardState.IsKeyDown(Keys.Left))
+                    screen = Screen.Play;
+                if (keyboardState.IsKeyDown(Keys.Right))
+                    screen = Screen.Controls;
+            }
+            else if (screen == Screen.Play)
+            {
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                    playing = true;
+
+                if (playing)
+                {
+                    seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (seconds > 20)
+                    {
+                        seconds = 0f;
+                    }
+
+
+
+
+                }
+
+
+            }
+            else if(screen == Screen.Controls)
+            {
+                if (keyboardState.IsKeyDown(Keys.Up))
+                    screen = Screen.Intro;
+            }
+            else if (screen == Screen.Win)
+            {
+
+            }
+            else if (screen == Screen.Lose)
+            {
+
+            }
+
+
 
             // TODO: Add your update logic here
 
@@ -93,14 +139,25 @@ namespace Summative_game
             _spriteBatch.Begin();
             if (screen == Screen.Play)
             {
-                _spriteBatch.Draw(playBackround,window, Color.White);
-                _spriteBatch.Draw(target, targetRect, Color.White);
-                _spriteBatch.DrawString(font, "Press enter to play", new Vector2(150, 100), Color.Black);
-                if (keyboardState.IsKeyDown(Keys.Enter))
-                {
-                 _spriteBatch.Draw(target, targetRect, Color.White);
-                }
+                _spriteBatch.Draw(playBackround, window, Color.White);
+                _spriteBatch.DrawString(font, "Press enter to play", new Vector2(275, 260), Color.Black);
+                _spriteBatch.DrawString(font, "Shoot as many targets as you can before the time is up!", new Vector2(10, 40), Color.Black);
 
+                if (playing)
+                {
+                    _spriteBatch.Draw(target, targetRect, Color.White);
+                    _spriteBatch.DrawString(font, "Targets shot:", new Vector2(550,10), Color.Black);
+                    _spriteBatch.DrawString(font, (20 - seconds).ToString("00.0"), new Vector2(270, 200), Color.Black);
+
+
+                }
+                else
+                {
+                    
+                    
+                }
+                   
+                    
             }
             if (screen == Screen.Intro)
             {
@@ -115,7 +172,7 @@ namespace Summative_game
                 _spriteBatch.DrawString(font, "Press upkey to return to menu.", new Vector2(125, 225), Color.White);
 
             }
-                
+            
             _spriteBatch.End();
             // TODO: Add your drawing code here
 
