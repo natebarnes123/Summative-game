@@ -27,6 +27,8 @@ namespace Summative_game
         Texture2D target;
         Texture2D crosshair;
         Rectangle targetRect;
+        Rectangle targetRect1;
+        Rectangle targetRect2;
         Texture2D controlScreen;
         Rectangle crosshairRect;
         Rectangle window;
@@ -36,7 +38,8 @@ namespace Summative_game
         bool playing;
         float seconds;
         SpriteFont font;
-        
+        int shots;
+        Random generator;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -47,15 +50,19 @@ namespace Summative_game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            generator = new Random();
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
             seconds = 0f;
             targetRect = new Rectangle(350, 350, 150, 150);
+            targetRect1 = new Rectangle(200, 450, 150, 150);
+            targetRect2 = new Rectangle(100, 200, 150, 150);
             base.Initialize();
             screen = Screen.Intro;
             playing = false;
+            shots = 0;
         }
 
         protected override void LoadContent()
@@ -100,11 +107,23 @@ namespace Summative_game
                 if (playing)
                 {
                     seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (seconds > 20)
+                    if (seconds >= 20)
                     {
                         seconds = 0f;
                     }
 
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (targetRect.Contains(mouseState.Position))
+                        {
+                            shots = +1;
+                            targetRect.X = generator.Next(0, 150);
+                        }
+                        if (targetRect1.Contains(mouseState.Position))
+                            shots = +1;
+                        if (targetRect2.Contains(mouseState.Position))
+                            shots = +1;
+                    }
 
 
 
@@ -140,21 +159,23 @@ namespace Summative_game
             if (screen == Screen.Play)
             {
                 _spriteBatch.Draw(playBackround, window, Color.White);
-                _spriteBatch.DrawString(font, "Press enter to play", new Vector2(275, 260), Color.Black);
-                _spriteBatch.DrawString(font, "Shoot as many targets as you can before the time is up!", new Vector2(10, 40), Color.Black);
+                
 
                 if (playing)
                 {
                     _spriteBatch.Draw(target, targetRect, Color.White);
+                    _spriteBatch.Draw(target, targetRect1, Color.White);
+                    _spriteBatch.Draw(target, targetRect2, Color.White);
                     _spriteBatch.DrawString(font, "Targets shot:", new Vector2(550,10), Color.Black);
-                    _spriteBatch.DrawString(font, (20 - seconds).ToString("00.0"), new Vector2(270, 200), Color.Black);
-
+                    _spriteBatch.DrawString(font, (20 - seconds).ToString("00"), new Vector2(390, 10), Color.Black);
+                    _spriteBatch.DrawString(font, shots, Color.White);
 
                 }
                 else
                 {
-                    
-                    
+                    _spriteBatch.DrawString(font, "Press enter to play", new Vector2(275, 260), Color.Black);
+                    _spriteBatch.DrawString(font, "Shoot as many targets as you can before the time is up!", new Vector2(10, 40), Color.Black);
+
                 }
                    
                     
