@@ -40,6 +40,7 @@ namespace Summative_game
         SpriteFont font;
         int shots;
         Random generator;
+        MouseState prevMouseState;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -83,9 +84,13 @@ namespace Summative_game
         protected override void Update(GameTime gameTime)
         {
             keyboardState = Keyboard.GetState();
+            prevMouseState = mouseState;
             mouseState = Mouse.GetState();
-
             
+            {
+                
+
+            }
 
 
             this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
@@ -107,22 +112,50 @@ namespace Summative_game
                 if (playing)
                 {
                     seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (seconds >= 20)
+                    if (seconds > 20)
                     {
                         seconds = 0f;
+                         
                     }
 
                     if (mouseState.LeftButton == ButtonState.Pressed)
                     {
                         if (targetRect.Contains(mouseState.Position))
                         {
-                            shots = +1;
-                            targetRect.X = generator.Next(0, 150);
+                            if (mouseState.LeftButton == ButtonState.Pressed &&
+                                prevMouseState.LeftButton == ButtonState.Released)
+                            {
+                                if (targetRect.Contains(mouseState.Position))
+                                    shots += 1;
+                                targetRect.X = generator.Next(0, 700);
+                                targetRect.Y = generator.Next(0, 500);
+                            }
                         }
+
                         if (targetRect1.Contains(mouseState.Position))
-                            shots = +1;
+                        {
+                            if (mouseState.LeftButton == ButtonState.Pressed &&
+                                prevMouseState.LeftButton == ButtonState.Released)
+                            {
+                                if (targetRect1.Contains(mouseState.Position))
+                                    shots += 1;
+                                targetRect1.X = generator.Next(0, 700);
+                                targetRect1.Y = generator.Next(0, 500);
+                            }
+                        }
+                            
                         if (targetRect2.Contains(mouseState.Position))
-                            shots = +1;
+                        {
+                            if (mouseState.LeftButton == ButtonState.Pressed &&
+                                prevMouseState.LeftButton == ButtonState.Released)
+                            {
+                                if (targetRect1.Contains(mouseState.Position))
+                                    shots += 1;
+                                targetRect2.X = generator.Next(0, 700);
+                                targetRect2.Y = generator.Next(0, 500);
+                            }
+                        }
+                            
                     }
 
 
@@ -166,9 +199,9 @@ namespace Summative_game
                     _spriteBatch.Draw(target, targetRect, Color.White);
                     _spriteBatch.Draw(target, targetRect1, Color.White);
                     _spriteBatch.Draw(target, targetRect2, Color.White);
-                    _spriteBatch.DrawString(font, "Targets shot:", new Vector2(550,10), Color.Black);
+                    _spriteBatch.DrawString(font, "Targets shot:" + shots, new Vector2(550,10), Color.Black);
                     _spriteBatch.DrawString(font, (20 - seconds).ToString("00"), new Vector2(390, 10), Color.Black);
-                    _spriteBatch.DrawString(font, shots, Color.White);
+                    
 
                 }
                 else
