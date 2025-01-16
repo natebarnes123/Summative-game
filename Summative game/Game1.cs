@@ -13,7 +13,7 @@ namespace Summative_game
         Controls,
         Play,
         Lose,
-        Win
+        playAgain
     }
 
 
@@ -35,6 +35,7 @@ namespace Summative_game
         MouseState mouseState;
         Screen screen;
         Texture2D playBackround;
+        Texture2D playAgain;
         bool playing;
         float seconds;
         SpriteFont font;
@@ -75,6 +76,7 @@ namespace Summative_game
             font = Content.Load<SpriteFont>("font");
             controlScreen = Content.Load<Texture2D>("Controls");
             playBackround = Content.Load<Texture2D>("playBackround");
+            playAgain = Content.Load<Texture2D>("playAgain");
             // TODO: use this.Content to load your game content here
 
             
@@ -115,7 +117,8 @@ namespace Summative_game
                     if (seconds > 20)
                     {
                         seconds = 0f;
-                         
+                        screen = Screen.playAgain;
+
                     }
 
                     if (mouseState.LeftButton == ButtonState.Pressed)
@@ -169,14 +172,21 @@ namespace Summative_game
                 if (keyboardState.IsKeyDown(Keys.Up))
                     screen = Screen.Intro;
             }
-            else if (screen == Screen.Win)
-            {
+             if (screen == Screen.playAgain)
+             {
+                if (keyboardState.IsKeyDown(Keys.Space))
+                    screen = Screen.Intro;
+                    playing = false;
+                if (keyboardState.IsKeyDown(Keys.Back))
+                    Exit();
+             }
+            
 
-            }
-            else if (screen == Screen.Lose)
-            {
+            
+            
+            
 
-            }
+            
 
 
 
@@ -226,7 +236,13 @@ namespace Summative_game
                 _spriteBatch.DrawString(font, "Press upkey to return to menu.", new Vector2(125, 225), Color.White);
 
             }
-            
+            if (screen == Screen.playAgain)
+            {
+                _spriteBatch.Draw(playAgain, window, Color.White);
+                _spriteBatch.DrawString(font, "Press the spacebar to play again", new Vector2(150, 170), Color.White);
+                _spriteBatch.DrawString(font, "Press the backs[ace key to exit", new Vector2(150, 300), Color.Green);
+                
+            }
             _spriteBatch.End();
             // TODO: Add your drawing code here
 
