@@ -70,7 +70,7 @@ namespace Summative_game
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            target = Content.Load<Texture2D>("target");
+            target = Content.Load<Texture2D>("targets");
             crosshair = Content.Load<Texture2D>("crosshair");
             Intro = Content.Load<Texture2D>("Intro");
             font = Content.Load<SpriteFont>("font");
@@ -177,6 +177,7 @@ namespace Summative_game
                 if (keyboardState.IsKeyDown(Keys.Space))
                     screen = Screen.Intro;
                     playing = false;
+                    shots = 0;
                 if (keyboardState.IsKeyDown(Keys.Back))
                     Exit();
              }
