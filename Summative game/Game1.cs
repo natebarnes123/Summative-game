@@ -25,12 +25,10 @@ namespace Summative_game
         KeyboardState keyboardState;
         Texture2D Intro;
         Texture2D target;
-        Texture2D crosshair;
         Rectangle targetRect;
         Rectangle targetRect1;
         Rectangle targetRect2;
         Texture2D controlScreen;
-        Rectangle crosshairRect;
         Rectangle window;
         MouseState mouseState;
         Screen screen;
@@ -42,6 +40,9 @@ namespace Summative_game
         int shots;
         Random generator;
         MouseState prevMouseState;
+        Rectangle textRect;
+        Rectangle textRect1;
+        Texture2D text;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -61,6 +62,8 @@ namespace Summative_game
             targetRect = new Rectangle(350, 350, 150, 150);
             targetRect1 = new Rectangle(200, 450, 150, 150);
             targetRect2 = new Rectangle(100, 200, 150, 150);
+            textRect = new Rectangle(300, 216, 150, 150);
+            textRect1 = new Rectangle(100, 200, 150, 150);
             base.Initialize();
             screen = Screen.Intro;
             playing = false;
@@ -71,12 +74,12 @@ namespace Summative_game
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             target = Content.Load<Texture2D>("targets");
-            crosshair = Content.Load<Texture2D>("crosshair");
-            Intro = Content.Load<Texture2D>("Intro");
+            Intro = Content.Load<Texture2D>("introBackround");
             font = Content.Load<SpriteFont>("font");
             controlScreen = Content.Load<Texture2D>("Controls");
             playBackround = Content.Load<Texture2D>("playBackround");
             playAgain = Content.Load<Texture2D>("playAgain");
+            text = Content.Load<Texture2D>("textRectangle");
             // TODO: use this.Content to load your game content here
 
             
@@ -229,6 +232,7 @@ namespace Summative_game
                 _spriteBatch.Draw(Intro, window, Color.White);
                 _spriteBatch.DrawString(font, "Left arrow to play", new Vector2(200, 350), Color.White);
                 _spriteBatch.DrawString(font, "Right arrow for controls", new Vector2(200, 100), Color.White);
+                _spriteBatch.Draw(text, textRect, textRect1, Color.White);
             }
             if (screen == Screen.Controls)
             {
@@ -241,7 +245,7 @@ namespace Summative_game
             {
                 _spriteBatch.Draw(playAgain, window, Color.White);
                 _spriteBatch.DrawString(font, "Press the spacebar to play again", new Vector2(150, 170), Color.White);
-                _spriteBatch.DrawString(font, "Press the backs[ace key to exit", new Vector2(150, 300), Color.Green);
+                _spriteBatch.DrawString(font, "Press the backspace key to exit", new Vector2(150, 300), Color.Green);
                 
             }
             _spriteBatch.End();
