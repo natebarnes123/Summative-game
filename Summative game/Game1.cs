@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -43,6 +44,9 @@ namespace Summative_game
         Rectangle textRect;
         Rectangle textRect1;
         Texture2D text;
+        Texture2D Crosshair;
+        Rectangle crosshairRect;
+        SoundEffect gunshot;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -64,6 +68,7 @@ namespace Summative_game
             targetRect2 = new Rectangle(100, 200, 150, 150);
             textRect = new Rectangle(300, 216, 150, 150);
             textRect1 = new Rectangle(100, 200, 150, 150);
+            crosshairRect = new Rectangle(0, 0, 70, 70);
             base.Initialize();
             screen = Screen.Intro;
             playing = false;
@@ -80,10 +85,12 @@ namespace Summative_game
             playBackround = Content.Load<Texture2D>("playBackround");
             playAgain = Content.Load<Texture2D>("playAgain");
             text = Content.Load<Texture2D>("textRectangle");
+            Crosshair = Content.Load<Texture2D>("Crosshaiir");
+            gunshot = Content.Load<SoundEffect>("gunShot");
             // TODO: use this.Content to load your game content here
 
-            
-            
+
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -123,7 +130,8 @@ namespace Summative_game
                         screen = Screen.playAgain;
 
                     }
-
+                    if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                        gunshot.Play();
                     if (mouseState.LeftButton == ButtonState.Pressed)
                     {
                         if (targetRect.Contains(mouseState.Position))
@@ -159,6 +167,8 @@ namespace Summative_game
                                     shots += 1;
                                 targetRect2.X = generator.Next(0, 700);
                                 targetRect2.Y = generator.Next(0, 500);
+
+                                
                             }
                         }
                             
@@ -215,7 +225,7 @@ namespace Summative_game
                     _spriteBatch.Draw(target, targetRect2, Color.White);
                     _spriteBatch.DrawString(font, "Targets shot:" + shots, new Vector2(550,10), Color.Black);
                     _spriteBatch.DrawString(font, (20 - seconds).ToString("00"), new Vector2(390, 10), Color.Black);
-                    
+                    _spriteBatch.Draw(Crosshair, crosshairRect, Color.White);
 
                 }
                 else
